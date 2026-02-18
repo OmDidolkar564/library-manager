@@ -8,7 +8,38 @@
   "projects": {
     "library-manager": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+  "@schematics/angular:component": {
+    "type": "component",
+    "style": "css",
+    "skipTests": false
+  },
+  "@schematics/angular:service": {
+    "type": "service",
+    "skipTests": false
+  },
+  "@schematics/angular:directive": {
+    "type": "directive",
+    "skipTests": false
+  },
+  "@schematics/angular:pipe": {
+    "skipTests": false
+  },
+  "@schematics/angular:guard": {
+    "type": "guard",
+    "skipTests": false
+  },
+  "@schematics/angular:interceptor": {
+    "type": "interceptor"
+  },
+  "@schematics/angular:resolver": {
+    "type": "resolver"
+  },
+  "@schematics/angular:module": {
+    "type": "module"
+  }
+}
+,
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
