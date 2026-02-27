@@ -1,48 +1,121 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, tap } from "rxjs";
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
+  private http = inject(HttpClient);
   private baseUrl = 'http://localhost:3001/api/auth';
+  private tokenKey = 'auth_token';
+  private userKey = 'current_user';
 
-  currentUser$ = new BehaviorSubject<any>(null);
+  currentUser$ = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient) {}
-
-  login(data: any) {
-    return this.http.post<any>(`${this.baseUrl}/login`, data)
-      .pipe(
-        tap(res => {
-          localStorage.setItem('token', res.token);
-          this.currentUser$.next(res.user);
-        })
-      );
+  constructor() {
+    this.restoreSession();
   }
 
-  register(data: any) {
-    return this.http.post(`${this.baseUrl}/register`, data);
+  /**
+   * Restore user session from localStorage
+   */
+  private restoreSession(): void {
+    const token = this.getToken();
+    const storedUser = localStorage.getItem(this.userKey);
+
+    if (token && storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        this.currentUser$.next(user);
+      } catch (e) {
+        this.clearSession();
+      }
+    }
   }
 
-  profile() {
-    return this.http.get(`${this.baseUrl}/profile`);
+  /**
+   * Register new user
+   */
+  register(data: {
+    username: string;
+    email: string;
+    fullName: string;
+    password: string;
+  }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, data).pipe(
+      tap((response: any) => {
+        if (response.token && response.user) {
+          this.setSession(response.token, response.user);
+        }
+      })
+    );
   }
 
-  logout() {
-    localStorage.removeItem('token');
+  /**
+   * Login user with username and password
+   */
+  login(username: string, password: string): Observable<any> {
+    const loginData = { username, password };
+    return this.http.post(`${this.baseUrl}/login`, loginData).pipe(
+      tap((response: any) => {
+        if (response.token && response.user) {
+          this.setSession(response.token, response.user);
+        }
+      })
+    );
+  }
+
+  /**
+   * Logout user
+   */
+  logout(): void {
+    this.clearSession();
     this.currentUser$.next(null);
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  /**
+   * Set session (token + user)
+   */
+  private setSession(token: string, user: User): void {
+    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+    this.currentUser$.next(user);
   }
 
-  isLoggedIn() {
-    return !!this.getToken();
+  /**
+   * Clear session
+   */
+  private clearSession(): void {
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
   }
 
-  isLibrarian() {
+  /**
+   * Get stored token
+   */
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  /**
+   * Check if user is logged in
+   */
+  isLoggedIn(): boolean {
+    return !!this.getToken() && this.currentUser$.value !== null;
+  }
+
+  /**
+   * Check if current user is librarian
+   */
+  isLibrarian(): boolean {
     return this.currentUser$.value?.role === 'librarian';
+  }
+
+  /**
+   * Get current user
+   */
+  getCurrentUser(): User | null {
+    return this.currentUser$.value;
   }
 }

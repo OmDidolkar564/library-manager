@@ -1,0 +1,154 @@
+.book-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-color: rgb(102, 126, 234);
+}
+
+.book-card.unavailable {
+  opacity: 0.7;
+}
+
+.book-image {
+  background: linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%);
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.image-placeholder {
+  font-size: 60px;
+  color: rgb(255, 255, 255);
+}
+
+.book-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.book-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(51, 51, 51);
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.book-author {
+  font-size: 13px;
+  color: rgb(102, 126, 234);
+  margin: 0 0 6px 0;
+  font-weight: 500;
+}
+
+.book-category {
+  font-size: 11px;
+  color: rgb(153, 153, 153);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.book-isbn {
+  font-size: 12px;
+  color: rgb(102, 102, 102);
+  margin: 0 0 8px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Courier New', monospace;
+}
+
+.book-description {
+  font-size: 13px;
+  color: rgb(102, 102, 102);
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+.book-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.available-count {
+  font-size: 12px;
+  color: rgb(39, 174, 96);
+  font-weight: 600;
+  background: rgb(212, 237, 218);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.unavailable-count {
+  font-size: 12px;
+  color: rgb(220, 53, 69);
+  font-weight: 600;
+  background: rgb(248, 215, 218);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.btn-borrow {
+  background: linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%);
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-borrow:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-borrow:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-borrow:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgb(187, 187, 187);
+}
+
+@media (max-width: 600px) {
+  .book-content {
+    padding: 12px;
+  }
+
+  .book-title {
+    font-size: 14px;
+  }
+
+  .book-image {
+    height: 120px;
+  }
+
+  .image-placeholder {
+    font-size: 50px;
+  }
+}

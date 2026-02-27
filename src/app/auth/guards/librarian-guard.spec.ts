@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { librarianGuard } from './librarian-guard';
+import { librarianGuard } from './librarian.guard';
 
 describe('librarianGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 

@@ -1,1 +1,168 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-card">
+    <h1>Library Manager</h1>
+    <h2>Create Account</h2>
+
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+      <!-- Error Message -->
+      @if (errorMessage) {
+        <div class="error-banner">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Success Message -->
+      @if (successMessage) {
+        <div class="success-banner">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          required
+          minlength="3"
+          #usernameField="ngModel"
+          class="form-control"
+          [class.is-invalid]="usernameField.invalid && usernameField.touched"
+        />
+        @if (usernameField.invalid && usernameField.touched) {
+          <div class="error-text">
+            @if (usernameField.errors?.['required']) {
+              <span>Username is required</span>
+            }
+            @if (usernameField.errors?.['minlength']) {
+              <span>Username must be at least 3 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Full Name Field -->
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input
+          id="fullName"
+          type="text"
+          name="fullName"
+          [(ngModel)]="fullName"
+          required
+          #fullNameField="ngModel"
+          class="form-control"
+          [class.is-invalid]="fullNameField.invalid && fullNameField.touched"
+        />
+        @if (fullNameField.invalid && fullNameField.touched) {
+          <div class="error-text">
+            @if (fullNameField.errors?.['required']) {
+              <span>Full name is required</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailField="ngModel"
+          class="form-control"
+          [class.is-invalid]="emailField.invalid && emailField.touched"
+        />
+        @if (emailField.invalid && emailField.touched) {
+          <div class="error-text">
+            @if (emailField.errors?.['required']) {
+              <span>Email is required</span>
+            }
+            @if (emailField.errors?.['email']) {
+              <span>Please enter a valid email</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordField="ngModel"
+          class="form-control"
+          [class.is-invalid]="passwordField.invalid && passwordField.touched"
+        />
+        @if (passwordField.invalid && passwordField.touched) {
+          <div class="error-text">
+            @if (passwordField.errors?.['required']) {
+              <span>Password is required</span>
+            }
+            @if (passwordField.errors?.['minlength']) {
+              <span>Password must be at least 6 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          #confirmPasswordField="ngModel"
+          class="form-control"
+          [class.is-invalid]="confirmPasswordField.invalid && confirmPasswordField.touched || (confirmPasswordField.touched && password !== confirmPassword)"
+        />
+        @if (confirmPasswordField.invalid && confirmPasswordField.touched) {
+          <div class="error-text">
+            @if (confirmPasswordField.errors?.['required']) {
+              <span>Please confirm your password</span>
+            }
+          </div>
+        }
+        @if (confirmPasswordField.touched && password !== confirmPassword) {
+          <div class="error-text">
+            <span>Passwords do not match</span>
+          </div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="registerForm.invalid || isLoading || password !== confirmPassword"
+      >
+        @if (!isLoading) {
+          <span>Create Account</span>
+        } @else {
+          <span>Creating Account...</span>
+        }
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/auth/login">Sign in here</a>
+    </p>
+  </div>
+</div>

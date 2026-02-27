@@ -1,0 +1,124 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo/Brand -->
+    <div class="navbar-brand">
+      <a routerLink="/books" class="logo">📚 Library Manager</a>
+    </div>
+
+    <!-- Hamburger Menu (Mobile) -->
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <ul class="nav-menu" [class.active]="isMenuOpen">
+      <!-- Browse Books (Always visible) -->
+      <li>
+        <a
+          routerLink="/books"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          class="nav-link"
+        >
+          Browse Books
+        </a>
+      </li>
+
+      <!-- When User is NOT logged in -->
+      @if (!isLoggedIn()) {
+        <li class="divider"></li>
+        <li>
+          <a
+            routerLink="/auth/login"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link"
+          >
+            Sign In
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/auth/register"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link btn-register"
+          >
+            Create Account
+          </a>
+        </li>
+      }
+
+      <!-- When User IS logged in -->
+      @if (isLoggedIn()) {
+        <li>
+          <a
+            routerLink="/my-books"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link"
+          >
+            My Books
+          </a>
+        </li>
+
+        <!-- Librarian Only Links -->
+        @if (isLibrarian()) {
+          <li class="divider"></li>
+          <li>
+            <a
+              routerLink="/librarian/dashboard"
+              routerLinkActive="active"
+              (click)="closeMenu()"
+              class="nav-link librarian-link"
+            >
+              📊 Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/librarian/books"
+              routerLinkActive="active"
+              (click)="closeMenu()"
+              class="nav-link librarian-link"
+            >
+              📖 Manage Books
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/librarian/users"
+              routerLinkActive="active"
+              (click)="closeMenu()"
+              class="nav-link librarian-link"
+            >
+              👥 Manage Users
+            </a>
+          </li>
+        }
+
+        <!-- User Profile & Logout -->
+        <li class="divider"></li>
+        <li class="user-profile">
+          <div class="user-info">
+            <span class="user-name">{{ currentUser?.fullName }}</span>
+            <span class="user-role" [class.librarian]="isLibrarian()">
+              {{ currentUser?.role }}
+            </span>
+          </div>
+        </li>
+        <li>
+          <button class="btn-logout" (click)="logout()">Logout</button>
+        </li>
+      }
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

@@ -1,1 +1,88 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <h1>Library Manager</h1>
+    <h2>Sign In</h2>
+
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <!-- Error Message -->
+      @if (errorMessage) {
+        <div class="error-banner">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username">Username or Email</label>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          required
+          minlength="3"
+          #usernameField="ngModel"
+          class="form-control"
+          [class.is-invalid]="usernameField.invalid && usernameField.touched"
+          placeholder="Enter username or email"
+        />
+        @if (usernameField.invalid && usernameField.touched) {
+          <div class="error-text">
+            @if (usernameField.errors?.['required']) {
+              <span>Username or email is required</span>
+            }
+            @if (usernameField.errors?.['minlength']) {
+              <span>Username must be at least 3 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordField="ngModel"
+          class="form-control"
+          [class.is-invalid]="passwordField.invalid && passwordField.touched"
+          placeholder="Enter password"
+        />
+        @if (passwordField.invalid && passwordField.touched) {
+          <div class="error-text">
+            @if (passwordField.errors?.['required']) {
+              <span>Password is required</span>
+            }
+            @if (passwordField.errors?.['minlength']) {
+              <span>Password must be at least 6 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        @if (!isLoading) {
+          <span>Sign In</span>
+        } @else {
+          <span>Signing In...</span>
+        }
+      </button>
+    </form>
+
+    <!-- Register Link -->
+    <p class="register-link">
+      Don't have an account?
+      <a routerLink="/auth/register">Create one here</a>
+    </p>
+  </div>
+</div>

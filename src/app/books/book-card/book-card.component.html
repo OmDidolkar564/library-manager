@@ -1,1 +1,47 @@
-<p>book-card works!</p>
+<div class="book-card" [class.unavailable]="!isAvailable()">
+  <!-- Book Image -->
+  <div class="book-image">
+    <div class="image-placeholder">📖</div>
+  </div>
+
+  <!-- Book Info -->
+  <div class="book-content">
+    <!-- Title -->
+    <h3 class="book-title">{{ book.title }}</h3>
+
+    <!-- Author -->
+    <p class="book-author">by {{ book.author }}</p>
+
+    <!-- Category -->
+    <p class="book-category">{{ book.category }}</p>
+
+    <!-- ISBN -->
+    <p class="book-isbn">ISBN: {{ book.isbn }}</p>
+
+    <!-- Description -->
+    <p class="book-description">{{ book.body }}</p>
+
+    <!-- Available Copies -->
+    <div class="book-meta">
+      @if (isAvailable()) {
+        <span class="available-count">
+          {{ book.availableCopies }} available
+        </span>
+      } @else {
+        <span class="unavailable-count">
+          Out of stock
+        </span>
+      }
+    </div>
+
+    <!-- Borrow Button -->
+    <button
+      class="btn-borrow"
+      [disabled]="!isAvailable()"
+      (click)="onBorrowClick()"
+      [title]="isAvailable() ? 'Borrow this book' : 'No copies available'"
+    >
+      {{ isAvailable() ? 'Borrow' : 'Unavailable' }}
+    </button>
+  </div>
+</div>
